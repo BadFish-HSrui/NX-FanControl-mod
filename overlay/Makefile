@@ -62,6 +62,10 @@ CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 UI_OVERRIDE_PATH := /config/sys-modules/
 CFLAGS += -DUI_OVERRIDE_PATH="\"$(UI_OVERRIDE_PATH)\""
 
+# For theme / wallpaper loading in GUI class method (add to project if theme does not appear)
+INITIALIZE_IN_GUI_DIRECTIVE := 1
+CFLAGS += -DINITIALIZE_IN_GUI_DIRECTIVE=$(INITIALIZE_IN_GUI_DIRECTIVE)
+
 
 CXXFLAGS	:= $(CFLAGS) -fno-exceptions -std=c++20
 
