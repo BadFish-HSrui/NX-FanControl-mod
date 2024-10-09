@@ -38,13 +38,13 @@ include $(DEVKITPRO)/libnx/switch_rules
 #   NACP building is skipped as well.
 #---------------------------------------------------------------------------------
 APP_TITLE	:=	NX-FanControl
-APP_VERSION :=	1.0.1
+APP_VERSION :=	1.0.1+
 
-TARGET		:=	$(notdir $(CURDIR))
+TARGET		:=	$(APP_TITLE)
 BUILD		:=	build
-SOURCES		:=	source
+SOURCES		:=	source lib/libultrahand/libultra/source
 DATA		:=	data
-INCLUDES	:=	include lib/libtesla/include ../lib/libfancontrol/include
+INCLUDES	:=	include lib/libultrahand/libultra/include lib/libultrahand/libtesla/include ../lib/libfancontrol/include
 
 NO_ICON		:=  1
 
@@ -58,12 +58,17 @@ CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
+# Enable appearance overriding
+UI_OVERRIDE_PATH := /config/sys-modules/
+CFLAGS += -DUI_OVERRIDE_PATH="\"$(UI_OVERRIDE_PATH)\""
+
+
 CXXFLAGS	:= $(CFLAGS) -fno-exceptions -std=c++20
 
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx ../../lib/libfancontrol/lib/libfancontrol.a
+LIBS	:= -lcurl -lz -lzzip -lmbedtls -lmbedx509 -lmbedcrypto -ljansson -lnx ../../lib/libfancontrol/lib/libfancontrol.a
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
