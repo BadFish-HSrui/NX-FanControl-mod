@@ -59,7 +59,7 @@ CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
 
 # Enable appearance overriding
-UI_OVERRIDE_PATH := /config/sys-modules/
+UI_OVERRIDE_PATH := /config/NX-FanControl/
 CFLAGS += -DUI_OVERRIDE_PATH="\"$(UI_OVERRIDE_PATH)\""
 
 # For theme / wallpaper loading in GUI class method (add to project if theme does not appear)
