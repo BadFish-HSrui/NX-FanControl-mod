@@ -12,9 +12,6 @@ private:
 
     tsl::elm::ListItem* _p0Label;
     tsl::elm::ListItem* _p1Label;
-    tsl::elm::ListItem* _p2Label;
-    tsl::elm::ListItem* _p3Label;
-    tsl::elm::ListItem* _p4Label;
 
 public:
     MainMenu();

@@ -8,42 +8,47 @@ SelectMenu::SelectMenu(int i, TemperaturePoint* fanCurveTable, bool* tableIsChan
     this->_tableIsChanged = tableIsChanged;
 
     this->_saveBtn = new tsl::elm::ListItem("Save");
-    this->_tempLabel = new tsl::elm::CategoryHeader(std::to_string((this->_fanCurveTable + this->_i)->temperature_c) + "C", true);
-    this->_fanLabel = new tsl::elm::CategoryHeader(std::to_string((int)((this->_fanCurveTable + this->_i)->fanLevel_f * 100)) + "%", true);
+    
+    if (this->_i == 0) {
+        this->_tempLabel = new tsl::elm::CategoryHeader("起转温度: " + std::to_string((this->_fanCurveTable + this->_i)->temperature_c) + "℃", true);
+    } else {
+        this->_tempLabel = new tsl::elm::CategoryHeader("满转温度: " + std::to_string((this->_fanCurveTable + this->_i)->temperature_c) + "℃", true);
+    }
 }
 
 tsl::elm::Element* SelectMenu::createUI(){
 
-    auto frame = new tsl::elm::OverlayFrame("NX-FanControl", "v1.0.3");
+    auto frame = new tsl::elm::OverlayFrame("NX-FanControl-mod", "v1.0.3-mod by 葡萄糖酸菜鱼");
 
     auto list = new tsl::elm::List();
 
     list->addItem(this->_tempLabel);
-    auto stepTemp = new tsl::elm::StepTrackBar("C", 21);
+    auto stepTemp = new tsl::elm::StepTrackBar("温度", 21);
     stepTemp->setValueChangedListener([this](u8 value)
     {
-        this->_tempLabel->setText(std::to_string(value * 5) + "C");
+        if (this->_i == 0) {
+            this->_tempLabel->setText("起转温度: " + std::to_string(value * 5) + "℃");
+        } else {
+            this->_tempLabel->setText("满转温度: " + std::to_string(value * 5) + "℃");
+        }
         (this->_fanCurveTable + this->_i)->temperature_c = value * 5;
         this->_saveBtn->setText("Save");
     });
     stepTemp->setProgress(((this->_fanCurveTable + this->_i)->temperature_c) / 5);
     list->addItem(stepTemp);
 
-    list->addItem(this->_fanLabel);
-    auto stepFanL = new tsl::elm::StepTrackBar("%", 21);
-    stepFanL->setValueChangedListener([this](u8 value)
-    {
-        this->_fanLabel->setText(std::to_string(value * 5) + "%");
-        (this->_fanCurveTable + this->_i)->fanLevel_f = (float)(value * 5)/100;
-        this->_saveBtn->setText("Save");
-    });
-    stepFanL->setProgress(((int)((this->_fanCurveTable + this->_i)->fanLevel_f * 100)) / 5);
-    list->addItem(stepFanL);
+    
 
     this->_saveBtn->setClickListener([this](uint64_t keys) 
     {
 	    if (keys & HidNpadButton_A) 
         {
+            if (this->_i == 0) {
+                (this->_fanCurveTable + this->_i)->fanLevel_f = 0.0f;
+            } else {
+                (this->_fanCurveTable + this->_i)->fanLevel_f = 1.0f;
+            }
+            
 		    WriteConfigFile(this->_fanCurveTable);
 
             if(IsRunning() != 0)
