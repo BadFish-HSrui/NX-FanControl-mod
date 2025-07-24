@@ -7,7 +7,7 @@ SelectMenu::SelectMenu(int i, TemperaturePoint* fanCurveTable, bool* tableIsChan
     this->_fanCurveTable = fanCurveTable;
     this->_tableIsChanged = tableIsChanged;
 
-    this->_saveBtn = new tsl::elm::ListItem("Save");
+    this->_saveBtn = new tsl::elm::ListItem("保存配置");
     
     if (this->_i == 0) {
         this->_tempLabel = new tsl::elm::CategoryHeader("起转温度: " + std::to_string((this->_fanCurveTable + this->_i)->temperature_c) + "℃", true);
@@ -32,7 +32,7 @@ tsl::elm::Element* SelectMenu::createUI(){
             this->_tempLabel->setText("满转温度: " + std::to_string(value * 5) + "℃");
         }
         (this->_fanCurveTable + this->_i)->temperature_c = value * 5;
-        this->_saveBtn->setText("Save");
+        this->_saveBtn->setText("保存配置");
     });
     stepTemp->setProgress(((this->_fanCurveTable + this->_i)->temperature_c) / 5);
     list->addItem(stepTemp);
@@ -63,7 +63,7 @@ tsl::elm::Element* SelectMenu::createUI(){
                 pmshellLaunchProgram(0, &programLocation, &pid);
             }
                 
-            this->_saveBtn->setText("Saved!");
+            this->_saveBtn->setText("保存成功!");
             *this->_tableIsChanged = true;
 		    return true;
 		}
